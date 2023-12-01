@@ -1,0 +1,71 @@
+%{
+
+    open Ast
+    open FSharp.Common.Parsing.LexYacc
+
+%}
+
+%token <System.Int32> INT
+%token <System.String> STRING
+
+%token IF THEN ELSE REPEAT WHILE DO UNTIL FOR SKIP TO
+       TRUE FALSE 
+       START_STMT END_STMT COMMA
+       PLUS MINUS MULT ASS INCEQ DECEQ MULTEQ
+       LT GT LEQ GEQ EQ NEQ
+       AND OR NOT
+       COMP
+%token EOF
+
+%type < while_interpreter.Ast.expr > program
+
+%start program 
+
+%%
+
+program: prog { $1 }
+
+program:
+    seq_expr EOF                           { $1 }
+
+seq_expr
+    : expr                                      { $1 }
+    | START_STMT seq_expr END_STMT              { $2 }
+    | seq_expr COMP seq_expr                    { Composition ($1 :: $3) }
+
+
+expr
+    : IF bexpr THEN expr ELSE expr              { Conditional ($2, $4, $6) }
+    | WHILE bexpr DO expr                       { While ($2, $4) }
+    | REPEAT expr UNTIL bexpr                   { Repeat ($2, $4) }
+    | var ASSIGN val                            { Assignment ($1, $3) }
+    | SKIP                                      { Skip }
+    | var COMMA var ASSIGN val COMMA val        { PairAssign ($1, $3, $5, $7) }
+    | val MULTEQ var                            { OpAssign ($1, "*=", $3) }
+    | val INCEQ var                             { OpAssign ($1, "+=", $3) }
+    | val DECEQ var                             { OpAssign ($1, "-=", $3) }
+    | FOR var ASSIGN val TO val DO expr         { For ($2, $4, $6, $8) }
+    | START_STMT seq_expr END_STMT              { $2 }
+
+bexpr
+    : bexpr AND bexpr               { BBinOp ($1, "&&", $3) }
+    | bexpr OR bexpr                { BBinOp ($1, "||", $3) }
+    | NOT bexpr                     { BUniOp ("!", $2) }
+    | TRUE                          { BConst ($1) }
+    | FALSE                         { BConst($1) }
+    | aexpr LEQ aexpr               { BoolRelation ($1, "<=", $3) }
+    | aexpr GEQ aexpr               { BoolRelation ($1, ">=", $3) }
+    | aexpr EQ aexpr                { BoolRelation ($1, "=", $3) }
+    | aexpr LT aexpr                { BoolRelation ($1, "<", $3) }
+    | aexpr GT aexpr                { BoolRelation ($1, ">", $3) }
+    | aexpr NEQ aexpr               { BoolRelation ($1, "!=", $3) }
+    | START_STMT bexpr END_STMT     { $2 }
+
+aexpr
+    : aexpr PLUS aexpr              { ABinOp ($1, "+", $3) }
+    | aexpr MINUS aexpr             { ABinOp ($1, "-", $3) }
+    | aexpr MULT aexpr              { ABinOp ($1, "*", $3) }
+    | INT                           { AConst ($1) }
+    | STRING                        { Var ($1) }
+    | START_STMT aexpr END_STMT     { $2 }
+
