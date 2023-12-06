@@ -31,7 +31,7 @@ program:
 seq_expr
     : expr                                      { $1 }
     | START_STMT seq_expr END_STMT              { $2 }
-    | seq_expr COMP seq_expr                    { Composition ($1 :: $3) }
+    | seq_expr COMP seq_expr                    { Composition ($1, $3) }
 
 
 expr

@@ -1,0 +1,70 @@
+{
+
+open System
+open FSharp.Text.Lexing
+
+open FSharp.Common.Parsing
+open FSharp.Common.Parsing.LexYacc
+open Ast
+open Parser
+
+let trim c lexbuf = let s = lexeme lexbuf in s.TrimStart [|c|]
+
+}
+
+let whitespace = [' ' '\t' ]
+let newline = ('\n' | "\r\n")
+let digit = ['0'-'9'] 
+let nat = digit+
+let idbody = ['a'-'z' 'A'-'Z' '0'-'9' '_']*['\'']*	
+let Uid = ['A'-'Z'] idbody
+let Lid = ['a'-'z' '_'] idbody
+let id = Uid | Lid
+
+rule tokenize = parse 
+    | eof               { EOF }
+    | whitespace        {tokenize lexbuf}
+    
+    | '+'			{ PLUS }
+	| '-'			{ MINUS }
+	| '*'			{ MULT }
+    | ":="          { ASSIGN }
+    | "+="          { INCEQ }
+    | "-="          { DECEQ }
+    | "*="          { MULTEQ }
+	| "!="			{ NEQ }
+    | '='			{ EQ }
+	| '<'			{ LT }
+	| '>'			{ GT }
+	| "<="			{ LEQ }
+	| ">="			{ GEQ }
+	| "||"			{ OR }
+	| "&&"			{ AND }
+	| "!"			{ NOT }
+    | "("           { START_STMT }
+    | ")"           { END_STMT }
+    | ";"           { COMP }
+    | ","           { COMMA }
+
+    // keywords
+    | "if"          { IF }
+    | "then"        { THEN }
+    | "else"		{ ELSE }
+	| "true"		{ TRUE }
+	| "false"		{ FALSE }
+    | "repeat"      { REPEAT }
+    | "while"       { WHILE }
+    | "do"          { DO }
+    | "until"       { UNTIL }
+    | "for"         { FOR }
+    | "skip"        { SKIP }
+    | "to"          { TO }
+
+    // literals
+	| "\"" [^'"']* "\""		{ let s = lexeme lexbuf in STRING (s.Trim [|'\"'|]) }
+	| '\'' [^'\''] '\''		{ let s = lexeme lexbuf in CHAR ((s.Trim [|'\''|]).Chars 0) }
+
+	// identifiers
+	| id 		            { Var (lexeme lexbuf) }
+    | int                   { AConst (Int32.Parse(lexeme lexbuf)) }
+    | _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }

@@ -17,7 +17,7 @@ type BExpr =
 type Statement = 
         | Assignment of string * AExpr
         | Skip
-        | Composition of Statement list
+        | Composition of Statement * Statement
         | Conditional of BExpr * Statement * Statement
         | While of BExpr * Statement
         | Repeat of Statement * BExpr
