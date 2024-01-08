@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
+  <Import Project="..\..\bin\Debug\FsLexYacc.targets" />
+  <ItemGroup>
+    <Compile Include="bin\Ast.fs" />
+    <Compile Include="Main.fs" />
+    <Compile Include="Ast.fs" />
+    <Compile Include="Evaluator.fs" />
+    <Compile Include="FixPoint.fs" />
+    <Compile Include="Interpreter.fs" />
+    <FsYacc Include="Parser.fsy">
+      <OtherFlags>--module Parser</OtherFlags>
+    </FsYacc>
+    <FsLex Include="Lexer.fsl">
+      <OtherFlags>--unicode</OtherFlags>
+    </FsLex>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="FsLexYacc" Version="11.2.0" />
+  </ItemGroup>
+</Project>
