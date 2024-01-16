@@ -1,5 +1,7 @@
 module Ast
 
+type State = Map<string,int>
+
 // Abstract syntax tree for arithmetic expressions
 type AExpr = 
         | AConst of int
@@ -25,5 +27,5 @@ type Statement =
         | PairAssign of string * string * AExpr * AExpr
         | OpAssign of string * string * AExpr
 
-// A program is just a list of statment
-type Prog = Prog of Statement list
+// A program is just statement
+type Prog = Prog of Statement
