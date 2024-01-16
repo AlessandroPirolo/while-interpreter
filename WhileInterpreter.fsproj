@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<FsLexToolExe>fslex.dll</FsLexToolExe>
+		<FsYaccToolExe>fsyacc.dll</FsYaccToolExe>
+	</PropertyGroup>
+	<ItemGroup>
+    <Compile Include="Ast.fs" />
+    <Compile Include ="FixPoint.fs" />
+		<FsYacc Include="Parser.fsy">
+			<OtherFlags>--module Parser</OtherFlags>
+		</FsYacc>
+		<FsLex Include="Lexer.fsl">
+			<OtherFlags>--module Lexer --unicode</OtherFlags>
+		</FsLex>
+		<Compile Include="Parser.fsi" />
+		<Compile Include="Parser.fs" />
+    <Compile Include="Lexer.fs" />
+    <!--Normal files -->
+		<Compile Include="Evaluator.fs" />
+		<Compile Include="Interp.fs" />
+		<Compile Include="Program.fs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FsLexYacc" Version="11.2.0">
+			<GeneratePathProperty>
+			</GeneratePathProperty>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Lexer.fsl" />
+		<None Include="Parser.fsy" />
+	</ItemGroup>
+</Project>

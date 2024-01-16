@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "while-interpreter": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\pirol\\Documents\\GitHub\\while-interpreter\\bin\\Debug\\net8.0"
+    }
+  }
+}
