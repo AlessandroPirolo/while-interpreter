@@ -99,11 +99,9 @@ let rec eval (stmt : Statement) (state : State) : State =
 
 
 and eval_while (bexpr : BExpr) (stmt : Statement) (state : State) : State = 
-    //boh 0 state |> ignore
     let expr = eval_bexpr bexpr
     let F g = cond expr (g << eval stmt)  id'
-    boh F 0 state 
-    //fix F state
+    fix F state
 
 and eval_repeat (bexpr : BExpr) (stmt : Statement) (state : State) : State =
     let expr = eval_bexpr bexpr
