@@ -13,5 +13,5 @@ bin
 .vs
 /examples
 .stack-work/
-dist_newstyle/
+dist-newstyle/
 .vs/
