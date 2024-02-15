@@ -12,3 +12,6 @@ bin
 .fake
 .vs
 /examples
+.stack-work/
+dist_newstyle/
+.vs/
