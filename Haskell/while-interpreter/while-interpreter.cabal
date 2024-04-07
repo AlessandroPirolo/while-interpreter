@@ -19,12 +19,43 @@ library
       Main
   build-depends:       
       base >= 4.7 && < 5,
+      attoparsec,
+      containers >= 0.6 && < 1,
+      mtl >= 2.2 && < 3,
+      text,
+      directory,
+      parsec,
+      bytestring
+  other-modules:
+      Parser.Ast
+    , Eval.EvalAexpr
+    , Eval.EvalBexpr
+    , Eval.Evaluator
+    , Eval.FixPoint
+    , Parser.Parser
+    , Interp.Interp
+    , Iteractive.Iteractive 
+    , Iteractive.Pretty
+  hs-source-dirs:
+      src
+    , src/Parser
+    , src/Interp
+    , src/Eval
+    , src/Iteractive
 
 executable while-interpreter
   hs-source-dirs:      src
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
+                       attoparsec,
+                       containers >= 0.6 && < 1,
+                       mtl >= 2.2 && < 3,
+                       text,
+                       bytestring,
+                       directory,
+                       parsec,
+                       array
                        
   ghc-options:         -Wall
                        -Wcompat
