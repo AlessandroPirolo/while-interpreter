@@ -1,11 +1,10 @@
 module Iteractive.Iteractive (
-    iteractive_
+    it
     , fromFile
 ) where
 
 import Interp.Interp (start)
-import Parser.Ast (State)
-import System.IO (isEOF, hFlush, stdout)
+import System.IO (hFlush, stdout)
 import Control.Monad (unless)
 import Iteractive.Pretty (prettyMap)
 
@@ -15,11 +14,11 @@ fromFile input = do
     let state = start input
     print_ $ prettyMap state
 
-iteractive_ :: IO()
-iteractive_ = do
+it :: IO()
+it = do
   input <- read_
   unless (input == ":q" || input == ":quit")
-       $ print_ ("computing...\n" ++ whileProg input) >> iteractive_
+       $ print_ ("computing...\n" ++ whileProg input) >> it
 
 read_ :: IO String
 read_ = putStr "\ESC[94mWhilePlus> \ESC[0m"

@@ -4,10 +4,9 @@ module Interp.Interp ( start ) where
 
 import Parser.Ast ( Statement(..), State )
 import Data.Map as Map ( fromListWith )
-import Data.List as List ( map, singleton )
+import Data.List as List ( map )
 import Eval.Evaluator ( eval )
 import Parser.Parser ( whileParser )
-import qualified Data.Text as T
 import Text.ParserCombinators.Parsec (parse)
 
 start :: String -> State

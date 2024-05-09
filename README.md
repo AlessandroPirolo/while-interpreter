@@ -13,8 +13,16 @@ sequence is infinite and so non-terminating, the program does not terminate eith
 
 ## How to use it
 1. Download the repo
-2. Run `.\build.ps1`
-3. Run `.\WhileAbstractInterpreter.exe "file_name.txt" "lower bound" "upper bound"`
+
+For F#: 
+
+2. Run `dotnet build WhileInterpreter.fsproj`
+3. Go to `bin/Debug/net7.0` and run the executable
+
+For Haskell: 
+
+2. Run `stack build`
+3. Run the executable `stack exec src/Main.exe`
 
 ## While+ Language
 The While syntax is the following:
@@ -50,6 +58,7 @@ These are just syntactic sugars:
 | `x *= a`                  | `x:= x * a`                               |
 | `repeat S until b`        | `while ¬b do S`                           |
 | `for i := a1 to a2 do S ` | `i := a1;while i < a2 do (S; i := i + 1)` |
+
 
 
 

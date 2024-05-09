@@ -1,14 +1,12 @@
 module Parser.Parser (whileParser) where
 
-import System.IO
 import Control.Monad
 import Text.ParserCombinators.Parsec (letter, alphaNum, Parser, sepBy1, (<|>), try)
 import Text.ParserCombinators.Parsec.Expr
 import Text.ParserCombinators.Parsec.Language (emptyDef)
 import qualified Text.ParserCombinators.Parsec.Token as Token
 import Parser.Ast (Statement (..), AExpr (..), BExpr (..), Aop (..), Bop (..), RelOp (..), OpAssOp (..))
-import Eval.EvalAexpr (evalAexpr)
-
+--import Eval.EvalAexpr (evalAexpr)
 
 languageDef =
    emptyDef { Token.identStart      = letter
