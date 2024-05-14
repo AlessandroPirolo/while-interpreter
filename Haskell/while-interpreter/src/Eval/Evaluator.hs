@@ -5,7 +5,7 @@ import Data.Map as Map ( insert, lookup )
 --import Data.Function (id)
 import Eval.EvalAexpr (evalAexpr)
 import Eval.EvalBexpr (evalBexpr)
-import Eval.FixPoint ( id', fix, cond )
+import Eval.FixPoint ( id_m, fix, cond )
 import Data.Maybe (fromJust)
 
 eval :: Statement -> State -> State

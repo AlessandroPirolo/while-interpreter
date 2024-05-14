@@ -2,14 +2,14 @@ module Eval.FixPoint (
     fix
     , bottom
     , cond
-    , id') where
+    , id_p) where
 import Parser.Ast ( State )
 
 bottom :: State -> Maybe State
 bottom = const Nothing
 
-id' :: State -> Maybe State
-id' = Just
+id_p :: State -> Maybe State
+id_p = Just
 
 cond :: (State -> Bool)
         -> (State -> Maybe State)
