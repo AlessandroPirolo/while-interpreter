@@ -37,4 +37,4 @@ evalBoolOp l Equ r state = let
 evalBoolOp l Neq r state = evalBexpr (BUnOp (BoolRelation Equ l r)) state
 evalBoolOp l Gg r state = evalBexpr (BUnOp (BoolRelation Leq l r)) state
 evalBoolOp l Ll r state = evalBexpr (BUnOp (BoolRelation Leq r l)) state
-evalBoolOp l Ll r state = evalBexpr (BoolRelation Leq r l) state 
+evalBoolOp l Geq r state = evalBexpr (BoolRelation Leq r l) state 
