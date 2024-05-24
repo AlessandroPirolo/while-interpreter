@@ -5,7 +5,7 @@ import Data.Map as Map ( insert, lookup )
 --import Data.Function (id)
 import Eval.EvalAexpr (evalAexpr)
 import Eval.EvalBexpr (evalBexpr)
-import Eval.FixPoint ( id_m, fix, cond )
+import Eval.FixPoint ( id_p, fix, cond )
 import Data.Maybe (fromJust)
 
 eval :: Statement -> State -> State
@@ -52,13 +52,13 @@ evalComposition stmts state = foldl (flip eval) state stmts
 evalWhile :: BExpr -> Statement -> State -> State
 evalWhile bexpr stmt state = let
     expr = evalBexpr bexpr
-    f g = cond expr (g . eval stmt) id'
+    f g = cond expr (g . eval stmt) id_p
     in fix f state
 
 evalRepeat :: Statement -> BExpr -> State -> State
 evalRepeat stmt bexpr state = let
     expr = evalBexpr bexpr
-    f g = cond expr id' g . eval stmt
+    f g = cond expr id_p g . eval stmt
     in fix f state
 
 evalFor :: String -> AExpr -> AExpr -> Statement -> State -> State

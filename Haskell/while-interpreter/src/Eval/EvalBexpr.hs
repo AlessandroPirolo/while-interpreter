@@ -19,27 +19,22 @@ evalUnOp bexpr state = let
     in not result
 
 evalOper :: BExpr -> Bop -> BExpr -> State -> Bool
-evalOper l op r state = let
+evalOper l OpAnd r state = let
     left =  evalBexpr l state
     right = evalBexpr r state
-    in boolOper op left right
+    in (&&) left right
+evalOper l OpOr r state = evalBexpr (BUnOp (BBinOp OpAnd (BUnOp l) (BUnOp r))) state
 
 evalBoolOp :: AExpr -> RelOp -> AExpr -> State -> Bool
-evalBoolOp l op r state = let
+evalBoolOp l Leq r state = let
     left = evalAexpr l state
     right = evalAexpr r state
-    in boolRel op left right
-
-
-boolOper :: Bop -> Bool -> Bool -> Bool
-boolOper OpAnd = (&&)
-boolOper OpOr = (||)
-
-
-boolRel :: Ord a => RelOp -> a -> a -> Bool
-boolRel Leq = (<=)
-boolRel Geq = (>=) 
-boolRel Gg = (>) 
-boolRel Ll = (<) 
-boolRel Equ = (==) 
-boolRel Neq = (/=) 
+    in (<=) left right
+evalBoolOp l Equ r state = let
+    left = evalAexpr l state
+    right = evalAexpr r state
+    in (==) left right
+evalBoolOp l Neq r state = evalBexpr (BUnOp (BoolRelation Equ l r)) state
+evalBoolOp l Gg r state = evalBexpr (BUnOp (BoolRelation Leq l r)) state
+evalBoolOp l Ll r state = evalBexpr (BUnOp (BoolRelation Leq r l)) state
+evalBoolOp l Ll r state = evalBexpr (BoolRelation Leq r l) state 
