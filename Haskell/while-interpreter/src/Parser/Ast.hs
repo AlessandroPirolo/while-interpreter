@@ -22,7 +22,6 @@ newtype Program = Program Statement
 -- Abstract syntax tree for statements
 data Statement
   = Assignment String AExpr                       
-  | PairAssignment (String, String) (AExpr, AExpr)  
   | Skip                                       
   | Composition [Statement]                    
   | Conditional BExpr Statement Statement       

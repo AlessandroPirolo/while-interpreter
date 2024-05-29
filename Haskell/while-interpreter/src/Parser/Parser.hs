@@ -28,7 +28,7 @@ languageDef =
                                       , "<", ">", "&&", "||", "!"
                                       , "<=", ">=", "==", "!="
                                       , "-=", "*=", "+=", ";"
-                                      , "(", ")", ","
+                                      , "(", ")"
                                       ]
             }
 
@@ -64,7 +64,6 @@ statement' =   ifStmt
            <|> repeatStmt
            <|> forStmt
            <|> try opAssignStmt
-           <|> try pairAssignStmt
            <|> assignStmt
 
 ifStmt :: Parser Statement
@@ -106,17 +105,6 @@ assignStmt =
   do var  <- identifier
      reservedOp ":="
      Assignment var <$> aExpression
-
-pairAssignStmt :: Parser Statement
-pairAssignStmt =
-  do var1  <- identifier
-     reservedOp ","
-     var2  <- identifier
-     reservedOp ":="
-     expr1 <- aExpression
-     reservedOp ","
-     expr2 <- aExpression
-     return $ PairAssignment (var1, var2) (expr1, expr2)
 
 opAssignStmt :: Parser Statement
 opAssignStmt =

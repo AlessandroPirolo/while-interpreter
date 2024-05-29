@@ -20,7 +20,6 @@ start stmt = let
 
 findStateVar :: Statement -> [String]
 findStateVar (Assignment var _)                 = [var]
-findStateVar (PairAssignment (var1, var2) _)    = [var1, var2]
 findStateVar (OpAssignment _ var _)             = [var]
 findStateVar Skip                               = []
 findStateVar (Conditional _ t f)                = findStateVar t ++ findStateVar f
