@@ -4,14 +4,15 @@ module Iteractive.Iteractive (
 ) where
 
 import Interp.Interp (start)
-import System.IO (hFlush, stdout)
+import System.IO (hFlush, stdout, readFile)
 import Control.Monad (unless)
 import Iteractive.Pretty (prettyMap)
 
 fromFile :: String -> IO()
 fromFile input = do
     print_ "computing...\n"
-    let state = start input
+    stmt <- readFile input 
+    let state = start stmt
     print_ $ prettyMap state
 
 it :: IO()
