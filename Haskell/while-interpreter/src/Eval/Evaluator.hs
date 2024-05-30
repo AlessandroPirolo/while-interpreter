@@ -1,6 +1,6 @@
 module Eval.Evaluator (eval) where
 
-import Parser.Ast ( AExpr (Var, AConst), BExpr (BoolRelation, BUnOp), Statement(..), State, OpAssOp(..), RelOp (Ll) )
+import Parser.Ast ( AExpr (Var, AConst, ABinOp), BExpr (BoolRelation, BUnOp), Statement(..), State, OpAssOp(..), RelOp (Ll), Aop(..) )
 import Data.Map as Map ( insert, lookup )
 --import Data.Function (id)
 import Eval.EvalAexpr (evalAexpr)
@@ -26,10 +26,9 @@ evalAssignment var aexpr state = let
 
 evalOpAssignment :: String -> OpAssOp -> AExpr -> State -> State
 evalOpAssignment var op aexpr state = let
-    result = evalAexpr aexpr state
-    result' = opAssign var op result state
-    state' = insert var result' state
-    in state'
+    oper = opAssign op
+    stmt = Assignment var (ABinOp oper (Var var) aexpr)
+    in eval stmt state
 
 evalConditional :: BExpr -> Statement -> Statement -> State -> State
 evalConditional bexpr t f state =
@@ -56,16 +55,7 @@ evalFor i to from e state = let
     desugared = Composition [Assignment i to, While (BoolRelation Ll (Var i) from) (Composition [e,OpAssignment Inceq i (AConst 1)])]
     in eval desugared state
 
-opAssign :: String -> OpAssOp -> Integer -> State -> Integer
-opAssign var Inceq val state = let
-    v = fromJust (Map.lookup var state)
-    result = v + val
-    in result
-opAssign var Multeq val state = let
-    v = fromJust (Map.lookup var state)
-    result = v * val
-    in result
-opAssign var Deceq val state = let
-    v = fromJust (Map.lookup var state)
-    result = v - val
-    in result
+opAssign :: OpAssOp -> Aop
+opAssign Inceq = Add
+opAssign Multeq = Mult
+opAssign Deceq = Minus
